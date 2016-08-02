@@ -17,6 +17,14 @@ import matplotlib.pyplot as plt
 from numpy import maximum
 from sklearn.cluster import KMeans
 
+def test_intoolbox():
+    print ("this is change to test version")
+    return True
+
+def test_changes_toolbox():
+    print ("this is change to test the version control")
+    return False
+
 def get_run_directory(args):
     """ Read system input arguments (argv) to get the run directory name
 
