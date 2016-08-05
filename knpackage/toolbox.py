@@ -41,7 +41,7 @@ def get_run_directory_and_file(args):
     run_directory = args.run_directory
     run_file = args.run_file
     num_of_process = args.num_of_process
-    num_of_bootstraps = args.number_of_bootstraps
+    num_of_bootstraps = args.num_of_bootstraps
 
     return run_directory, run_file, num_of_process, num_of_bootstraps
 
