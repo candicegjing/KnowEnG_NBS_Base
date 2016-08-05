@@ -20,9 +20,8 @@ def cc_nmf(run_parameters):
     start_time = time.time()
     run_cc_nmf(run_parameters)
     end_time = time.time()
-
     run_time = end_time - start_time
-    output_file = open('time_check','w')
+    output_file = open('time_check','a')
     output_file.write("Running time : % seconds" %(run_time))
     output_file.close()
 
