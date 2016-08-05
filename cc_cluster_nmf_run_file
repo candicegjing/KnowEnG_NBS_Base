@@ -9,9 +9,9 @@ h_clust_eq_limit	200
 percent_sample	0.8
 number_of_bootstraps	3
 display_clusters	1
-verbose	1	
+verbose	1
 use_now_name	1
-method1	cluster_nmf	
-method2	cc_cluster_nmf	
-method3	net_cluster_nmf	
+method1	cluster_nmf
+method2	cc_cluster_nmf
+method3	net_cluster_nmf
 method4	cc_net_cluster_nmf
