@@ -17,8 +17,10 @@ import scipy.sparse as spar
 from scipy import stats
 from sklearn.preprocessing import normalize
 from sklearn.cluster import KMeans
-
 import matplotlib.pyplot as plt
+
+from multiprocessing import Pool
+
 
 def get_run_directory_and_file(args):
     """ Read system input arguments (argv) to get the run directory name.
@@ -712,6 +714,17 @@ def find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_dag, lap_va
 
     return
 
+
+def find_and_save_nmf_cluster(spreadsheet_mat, run_parameters, sample):
+    sample_random, sample_permutation = pick_a_sample(spreadsheet_mat, np.float64(run_parameters["percent_sample"]))
+
+    h_mat = nmf(sample_random, run_parameters)
+    save_temporary_cluster(h_mat, sample_permutation, run_parameters, sample)
+
+    if int(run_parameters['verbose']) != 0:
+        print('nmf {} of {}'.format(sample + 1, run_parameters["number_of_bootstraps"]))
+
+
 def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters):
     """ central loop: compute components for the consensus matrix by
         non-negative matrix factorization.
@@ -720,18 +733,22 @@ def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters):
         spreadsheet_mat: genes x samples matrix.
         run_parameters: dictionay of run-time parameters.
     """
-    for sample in range(0, int(run_parameters["number_of_bootstraps"])):
-        sample_random, sample_permutation = pick_a_sample(
-            spreadsheet_mat, np.float64(run_parameters["percent_sample"]))
+    p = Pool(processes=5)
+    range_list = range(0, int(run_parameters["number_of_bootstraps"]))
+    input_param = []
+    for random_num in range_list:
+        tmp_list = []
+        tmp_list.append(spreadsheet_mat)
+        tmp_list.append(run_parameters)
+        tmp_list.append(random_num)
+    p.map(find_and_save_nmf_cluster(), input_param)
 
-        h_mat = nmf(sample_random, run_parameters)
-        save_temporary_cluster(h_mat, sample_permutation, run_parameters, sample)
+    p.close()
+    p.join()
 
-        if int(run_parameters['verbose']) != 0:
-            print('nmf {} of {}'.format(
-                sample + 1, run_parameters["number_of_bootstraps"]))
+  #  for sample in range(0, int(run_parameters["number_of_bootstraps"])):
 
-    return
+
 
 def save_temporary_cluster(h_matrix, sample_permutation, run_parameters, sequence_number):
     """ save one h_matrix and one permutation in temorary files with sequence_number appended names.
