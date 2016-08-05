@@ -18,12 +18,12 @@ def cc_nmf(run_parameters):
     '''kmeans consensus clustering of the nmf-based clusters'''
     from knpackage.toolbox import run_cc_nmf
     start_time = time.time()
-
+    num_of_process = 3
     run_cc_nmf(run_parameters, num_of_process)
     end_time = time.time()
     run_time = end_time - start_time
     output_file = open('time_check','a')
-    output_file.write("Running time : % seconds" %(run_time))
+    output_file.write("Running time on parallelism % : % seconds" %(num_of_process, run_time))
     output_file.close()
 
 def net_nmf(run_parameters):
