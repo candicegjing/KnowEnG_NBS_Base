@@ -578,7 +578,7 @@ def run_nmf(run_parameters):
 
     return
 
-def run_cc_nmf(run_parameters):
+def run_cc_nmf(run_parameters, num_of_process):
     """ wrapper: call sequence to perform non-negative matrix factorization with
         consensus clustering and write results.
 
@@ -589,7 +589,7 @@ def run_cc_nmf(run_parameters):
     spreadsheet_mat = spreadsheet_df.as_matrix()
     spreadsheet_mat = get_quantile_norm(spreadsheet_mat)
 
-    find_and_save_nmf_clusters(spreadsheet_mat, run_parameters)
+    find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process)
 
     linkage_matrix, indicator_matrix = initialization(spreadsheet_mat)
     consensus_matrix = form_consensus_matrix(run_parameters, linkage_matrix, indicator_matrix)
@@ -725,7 +725,7 @@ def find_and_save_nmf_cluster(spreadsheet_mat, run_parameters, sample):
         print('nmf {} of {}'.format(sample + 1, run_parameters["number_of_bootstraps"]))
 
 
-def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters):
+def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process):
     """ central loop: compute components for the consensus matrix by
         non-negative matrix factorization.
 
@@ -733,7 +733,7 @@ def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters):
         spreadsheet_mat: genes x samples matrix.
         run_parameters: dictionay of run-time parameters.
     """
-    p = Pool(processes=3)
+    p = Pool(processes=num_of_process)
     range_list = range(0, int(run_parameters["number_of_bootstraps"]))
     input_param = []
     for random_num in range_list:
