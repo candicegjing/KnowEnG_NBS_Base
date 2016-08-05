@@ -6,6 +6,9 @@ Created on Wed Jul 20 14:47:45 2016
 
 """
 
+
+import time
+
 def nmf(run_parameters):
     '''nmf clustering'''
     from knpackage.toolbox import run_nmf
@@ -14,7 +17,14 @@ def nmf(run_parameters):
 def cc_nmf(run_parameters):
     '''kmeans consensus clustering of the nmf-based clusters'''
     from knpackage.toolbox import run_cc_nmf
+    start_time = time.time()
     run_cc_nmf(run_parameters)
+    end_time = time.time()
+
+    run_time = end_time - start_time
+    output_file = open('time_check','w')
+    output_file.write("Running time : % seconds" %(run_time))
+    output_file.close()
 
 def net_nmf(run_parameters):
     '''net-nmf clustering "'''
