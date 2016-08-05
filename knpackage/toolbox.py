@@ -20,7 +20,7 @@ from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
 from multiprocessing import Pool
-
+import itertools
 
 def get_run_directory_and_file(args):
     """ Read system input arguments (argv) to get the run directory name.
@@ -743,7 +743,10 @@ def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters):
         tmp_list.append(random_num)
         input_param.append(tmp_list)
     print(input_param)
-    p.map(find_and_save_nmf_cluster(), input_param)
+    p.map(find_and_save_nmf_cluster(),
+          itertools.izip(itertools.repeat(spreadsheet_mat),
+                         itertools.repeat(run_parameters),
+                         range_list))
 
     p.close()
     p.join()
