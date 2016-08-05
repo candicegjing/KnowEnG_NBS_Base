@@ -743,7 +743,7 @@ def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters):
         tmp_list.append(random_num)
         input_param.append(tmp_list)
     print(input_param)
-    p.map(find_and_save_nmf_cluster(),
+    p.map(find_and_save_nmf_cluster,
           itertools.izip(itertools.repeat(spreadsheet_mat),
                          itertools.repeat(run_parameters),
                          range_list))
