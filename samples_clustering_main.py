@@ -23,7 +23,7 @@ def cc_nmf(run_parameters):
     end_time = time.time()
     run_time = end_time - start_time
     output_file = open('time_check','a')
-    output_file.write("Running time on parallelism % : % seconds" %(num_of_process, run_time))
+    output_file.write("Running time on parallelism {} is {} seconds\n".format(num_of_process, run_time))
     output_file.close()
 
 def net_nmf(run_parameters):
