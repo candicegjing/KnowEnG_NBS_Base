@@ -34,6 +34,9 @@ def get_run_directory_and_file(args):
     parser = argparse.ArgumentParser()
     parser.add_argument('-run_directory', type=str)
     parser.add_argument('-run_file', type=str)
+    parser.add_argument('-num_of_process', type=int)
+    parser.add_argument('-number_of_bootstraps', type=int)
+
     args = parser.parse_args()
     run_directory = args.run_directory
     run_file = args.run_file
@@ -578,7 +581,7 @@ def run_nmf(run_parameters):
 
     return
 
-def run_cc_nmf(run_parameters, num_of_process):
+def run_cc_nmf(run_parameters, num_of_process, number_of_bootstraps):
     """ wrapper: call sequence to perform non-negative matrix factorization with
         consensus clustering and write results.
 
@@ -589,7 +592,7 @@ def run_cc_nmf(run_parameters, num_of_process):
     spreadsheet_mat = spreadsheet_df.as_matrix()
     spreadsheet_mat = get_quantile_norm(spreadsheet_mat)
 
-    find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process)
+    find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process, number_of_bootstraps)
 
     linkage_matrix, indicator_matrix = initialization(spreadsheet_mat)
     consensus_matrix = form_consensus_matrix(run_parameters, linkage_matrix, indicator_matrix)
@@ -725,7 +728,7 @@ def find_and_save_nmf_cluster(spreadsheet_mat, run_parameters, sample):
         print('nmf {} of {}'.format(sample + 1, run_parameters["number_of_bootstraps"]))
 
 
-def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process):
+def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process, number_of_bootstraps):
     """ central loop: compute components for the consensus matrix by
         non-negative matrix factorization.
 
@@ -734,14 +737,8 @@ def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process):
         run_parameters: dictionay of run-time parameters.
     """
     p = Pool(processes=num_of_process)
-    range_list = range(0, int(run_parameters["number_of_bootstraps"]))
-    input_param = []
-    for random_num in range_list:
-        tmp_list = []
-        tmp_list.append(spreadsheet_mat)
-        tmp_list.append(run_parameters)
-        tmp_list.append(random_num)
-        input_param.append(tmp_list)
+ #   range_list = range(0, int(run_parameters["number_of_bootstraps"]))
+    range_list = range(0, number_of_bootstraps)
     p.starmap(find_and_save_nmf_cluster,
           zip(itertools.repeat(spreadsheet_mat),
               itertools.repeat(run_parameters),
@@ -749,9 +746,6 @@ def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process):
 
     p.close()
     p.join()
-
-  #  for sample in range(0, int(run_parameters["number_of_bootstraps"])):
-
 
 
 def save_temporary_cluster(h_matrix, sample_permutation, run_parameters, sequence_number):
