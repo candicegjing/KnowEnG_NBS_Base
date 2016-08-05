@@ -742,7 +742,7 @@ def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters):
         tmp_list.append(run_parameters)
         tmp_list.append(random_num)
         input_param.append(tmp_list)
-
+    print(input_param)
     p.map(find_and_save_nmf_cluster(), input_param)
 
     p.close()
