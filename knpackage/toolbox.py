@@ -733,7 +733,7 @@ def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters):
         spreadsheet_mat: genes x samples matrix.
         run_parameters: dictionay of run-time parameters.
     """
-    p = Pool(processes=5)
+    p = Pool(processes=3)
     range_list = range(0, int(run_parameters["number_of_bootstraps"]))
     input_param = []
     for random_num in range_list:
