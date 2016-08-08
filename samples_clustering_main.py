@@ -34,7 +34,7 @@ def cc_net_nmf(run_parameters, num_of_process):
     '''kmeans consensus clustering of the net-nmf-based clusters'''
     from knpackage.toolbox import run_cc_net_nmf
     start_time = time.time()
-    run_cc_net_nmf(run_parameters)
+    run_cc_net_nmf(run_parameters, num_of_process)
     end_time = time.time()
     run_time = end_time - start_time
     output_file = open('time_check.net_nmf', 'a')
