@@ -35,15 +35,13 @@ def get_run_directory_and_file(args):
     parser.add_argument('-run_directory', type=str)
     parser.add_argument('-run_file', type=str)
     parser.add_argument('-num_of_process', type=int)
-    parser.add_argument('-num_of_bootstraps', type=int)
 
     args = parser.parse_args()
     run_directory = args.run_directory
     run_file = args.run_file
     num_of_process = args.num_of_process
-    num_of_bootstraps = args.num_of_bootstraps
 
-    return run_directory, run_file, num_of_process, num_of_bootstraps
+    return run_directory, run_file, num_of_process
 
 def get_run_parameters(run_directory, run_file):
     """ Read system input arguments run directory name and run_file into a dictionary.
