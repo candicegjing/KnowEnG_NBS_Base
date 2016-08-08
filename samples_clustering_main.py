@@ -14,14 +14,14 @@ def nmf(run_parameters):
     from knpackage.toolbox import run_nmf
     run_nmf(run_parameters) 
 
-def cc_nmf(run_parameters, num_of_process, number_of_bootstraps):
+def cc_nmf(run_parameters, num_of_process):
     '''kmeans consensus clustering of the nmf-based clusters'''
     from knpackage.toolbox import run_cc_nmf
     start_time = time.time()
-    run_cc_nmf(run_parameters, num_of_process, number_of_bootstraps)
+    run_cc_nmf(run_parameters, num_of_process)
     end_time = time.time()
     run_time = end_time - start_time
-    output_file = open('time_check','a')
+    output_file = open('time_check.nmf','a')
     output_file.write("Running time on parallelism {} is {} seconds\n".format(num_of_process, run_time))
     output_file.close()
 
@@ -33,7 +33,16 @@ def net_nmf(run_parameters, num_of_process, number_of_bootstraps):
 def cc_net_nmf(run_parameters, num_of_process, number_of_bootstraps):
     '''kmeans consensus clustering of the net-nmf-based clusters'''
     from knpackage.toolbox import run_cc_net_nmf
+
+    start_time = time.time()
     run_cc_net_nmf(run_parameters)
+    end_time = time.time()
+    run_time = end_time - start_time
+    output_file = open('time_check.net_nmf', 'a')
+    output_file.write("Running time on parallelism {} is {} seconds\n".format(num_of_process, run_time))
+    output_file.close()
+
+
 
 SELECT = {
     "cluster_nmf":nmf,

@@ -594,7 +594,7 @@ def run_cc_nmf(run_parameters, num_of_process, number_of_bootstraps):
     spreadsheet_mat = spreadsheet_df.as_matrix()
     spreadsheet_mat = get_quantile_norm(spreadsheet_mat)
 
-    find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process, number_of_bootstraps)
+    find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process)
 
     linkage_matrix, indicator_matrix = initialization(spreadsheet_mat)
     consensus_matrix = form_consensus_matrix(run_parameters, linkage_matrix, indicator_matrix)
@@ -692,7 +692,25 @@ def run_cc_net_nmf(run_parameters):
 
     return
 
-def find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_dag, lap_val, run_parameters):
+
+
+def find_and_save_net_nmf_cluster(network_mat, spreadsheet_mat, run_parameters, sample, lap_val, lap_dag):
+    sample_random, sample_permutation = pick_a_sample(
+        spreadsheet_mat, np.float64(run_parameters["percent_sample"]))
+    sample_smooth, iterations = \
+        smooth_spreadsheet_with_rwr(sample_random, network_mat, run_parameters)
+
+    if int(run_parameters['verbose']) != 0:
+        print("{} of {}: iterations = {}".format(
+            sample + 1, run_parameters["number_of_bootstraps"], iterations))
+
+    sample_quantile_norm = get_quantile_norm(sample_smooth)
+    h_mat = perform_net_nmf(sample_quantile_norm, lap_val, lap_dag, run_parameters)
+
+    save_temporary_cluster(h_mat, sample_permutation, run_parameters, sample)
+
+
+def find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_dag, lap_val, run_parameters, num_of_process):
     """ central loop: compute components for the consensus matrix from the input
         network and spreadsheet matrices and save them to temp files.
 
@@ -702,22 +720,19 @@ def find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_dag, lap_va
         lap_dag, lap_val: laplacian matrix components; L = lap_dag - lap_val.
         run_parameters: dictionay of run-time parameters.
     """
-    for sample in range(0, int(run_parameters["number_of_bootstraps"])):
-        sample_random, sample_permutation = pick_a_sample(
-            spreadsheet_mat, np.float64(run_parameters["percent_sample"]))
-        sample_smooth, iterations = \
-        smooth_spreadsheet_with_rwr(sample_random, network_mat, run_parameters)
+    p = Pool(processes=num_of_process)
+    range_list = range(0, int(run_parameters["number_of_bootstraps"]))
+    p.starmap(find_and_save_net_nmf_cluster,
+              zip(itertools.repeat(network_mat),
+                  itertools.repeat(spreadsheet_mat),
+                  itertools.repeat(lap_dag),
+                  itertools.repeat(lap_val),
+                  itertools.repeat(run_parameters),
+                  range_list))
 
-        if int(run_parameters['verbose']) != 0:
-            print("{} of {}: iterations = {}".format(
-                sample + 1, run_parameters["number_of_bootstraps"], iterations))
+    p.close()
+    p.join()
 
-        sample_quantile_norm = get_quantile_norm(sample_smooth)
-        h_mat = perform_net_nmf(sample_quantile_norm, lap_val, lap_dag, run_parameters)
-
-        save_temporary_cluster(h_mat, sample_permutation, run_parameters, sample)
-
-    return
 
 
 def find_and_save_nmf_cluster(spreadsheet_mat, run_parameters, sample):
@@ -730,7 +745,7 @@ def find_and_save_nmf_cluster(spreadsheet_mat, run_parameters, sample):
         print('nmf {} of {}'.format(sample + 1, run_parameters["number_of_bootstraps"]))
 
 
-def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process, number_of_bootstraps):
+def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process):
     """ central loop: compute components for the consensus matrix by
         non-negative matrix factorization.
 
@@ -739,8 +754,7 @@ def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process, 
         run_parameters: dictionay of run-time parameters.
     """
     p = Pool(processes=num_of_process)
- #   range_list = range(0, int(run_parameters["number_of_bootstraps"]))
-    range_list = range(0, number_of_bootstraps)
+    range_list = range(0, int(run_parameters["number_of_bootstraps"]))
     p.starmap(find_and_save_nmf_cluster,
           zip(itertools.repeat(spreadsheet_mat),
               itertools.repeat(run_parameters),

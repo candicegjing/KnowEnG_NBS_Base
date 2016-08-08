@@ -3,7 +3,7 @@ samples_file_name	input_data/final_clean_full_matrix.df
 results_directory	results
 tmp_directory	tmp
 method	cc_net_cluster_nmf
-k	4
+k	3
 number_of_iteriations_in_rwr	100
 obj_fcn_chk_freq	50
 it_max	10000
