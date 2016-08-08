@@ -744,7 +744,7 @@ def find_and_save_nmf_cluster(spreadsheet_mat, run_parameters, sample):
     save_temporary_cluster(h_mat, sample_permutation, run_parameters, sample)
 
     if int(run_parameters['verbose']) != 0:
-        print('nmf {} of {}'.format(sample + 1, run_parameters["number_of_bootstraps"]))
+      print('nmf {} of {}'.format(sample + 1, run_parameters["number_of_bootstraps"]))
 
 
 def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process, num_of_boostraps):

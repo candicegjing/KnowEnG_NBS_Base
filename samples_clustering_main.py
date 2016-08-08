@@ -22,7 +22,7 @@ def cc_nmf(run_parameters, num_of_process, num_of_boostraps):
     end_time = time.time()
     run_time = end_time - start_time
     output_file = open('time_check.nmf','a')
-    output_file.write("Running time on parallelism {} is {} seconds\n".format(num_of_process, run_time))
+    output_file.write("Running time on {} bootstrap, parallelism {} is {} seconds\n".format(num_of_boostraps, num_of_process, run_time))
     output_file.close()
 
 def net_nmf(run_parameters, num_of_process, num_of_boostraps):
@@ -38,7 +38,8 @@ def cc_net_nmf(run_parameters, num_of_process, num_of_boostraps):
     end_time = time.time()
     run_time = end_time - start_time
     output_file = open('time_check.net_nmf', 'a')
-    output_file.write("Running time on parallelism {} is {} seconds\n".format(num_of_process, run_time))
+    output_file.write(
+        "Running time on {} bootstrap, parallelism {} is {} seconds\n".format(num_of_boostraps, num_of_process, run_time))
     output_file.close()
 
 
