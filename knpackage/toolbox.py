@@ -692,7 +692,7 @@ def run_cc_net_nmf(run_parameters, num_of_process):
 
 
 
-def find_and_save_net_nmf_cluster(network_mat, spreadsheet_mat, run_parameters, sample, lap_val, lap_dag):
+def find_and_save_net_nmf_cluster(network_mat, spreadsheet_mat, run_parameters, lap_val, lap_dag, sample):
     sample_random, sample_permutation = pick_a_sample(
         spreadsheet_mat, np.float64(run_parameters["percent_sample"]))
     sample_smooth, iterations = \
