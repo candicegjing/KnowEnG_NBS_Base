@@ -35,13 +35,16 @@ def get_run_directory_and_file(args):
     parser.add_argument('-run_directory', type=str)
     parser.add_argument('-run_file', type=str)
     parser.add_argument('-num_of_process', type=int)
+    parser.add_argument('-num_of_boostraps', type=int)
+
 
     args = parser.parse_args()
     run_directory = args.run_directory
     run_file = args.run_file
     num_of_process = args.num_of_process
+    num_of_boostraps = args.num_of_boostraps
 
-    return run_directory, run_file, num_of_process
+    return run_directory, run_file, num_of_process, num_of_boostraps
 
 def get_run_parameters(run_directory, run_file):
     """ Read system input arguments run directory name and run_file into a dictionary.
@@ -581,7 +584,7 @@ def run_nmf(run_parameters):
 
     return
 
-def run_cc_nmf(run_parameters, num_of_process):
+def run_cc_nmf(run_parameters, num_of_process, num_of_boostraps):
     """ wrapper: call sequence to perform non-negative matrix factorization with
         consensus clustering and write results.
 
@@ -592,7 +595,7 @@ def run_cc_nmf(run_parameters, num_of_process):
     spreadsheet_mat = spreadsheet_df.as_matrix()
     spreadsheet_mat = get_quantile_norm(spreadsheet_mat)
 
-    find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process)
+    find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process, num_of_boostraps)
 
     linkage_matrix, indicator_matrix = initialization(spreadsheet_mat)
     consensus_matrix = form_consensus_matrix(run_parameters, linkage_matrix, indicator_matrix)
@@ -649,7 +652,7 @@ def run_net_nmf(run_parameters):
 
     return
 
-def run_cc_net_nmf(run_parameters, num_of_process):
+def run_cc_net_nmf(run_parameters, num_of_process, num_of_boostraps):
     """ wrapper: call sequence to perform network based stratification with consensus clustering
         and write results.
 
@@ -676,7 +679,7 @@ def run_cc_net_nmf(run_parameters, num_of_process):
     spreadsheet_mat = spreadsheet_df.as_matrix()
     sample_names = spreadsheet_df.columns
 
-    find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_process)
+    find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_process, num_of_boostraps)
 
     linkage_matrix, indicator_matrix = initialization(spreadsheet_mat)
     consensus_matrix = form_consensus_matrix(
@@ -708,7 +711,7 @@ def find_and_save_net_nmf_cluster(network_mat, spreadsheet_mat, lap_dag, lap_val
     save_temporary_cluster(h_mat, sample_permutation, run_parameters, sample)
 
 
-def find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_dag, lap_val, run_parameters, num_of_process):
+def find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_dag, lap_val, run_parameters, num_of_process, num_of_boostraps):
     """ central loop: compute components for the consensus matrix from the input
         network and spreadsheet matrices and save them to temp files.
 
@@ -719,7 +722,8 @@ def find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_dag, lap_va
         run_parameters: dictionay of run-time parameters.
     """
     p = Pool(processes=num_of_process)
-    range_list = range(0, int(run_parameters["number_of_bootstraps"]))
+    #range_list = range(0, int(run_parameters["number_of_bootstraps"]))
+    range_list = range(0, num_of_boostraps)
     p.starmap(find_and_save_net_nmf_cluster,
               zip(itertools.repeat(network_mat),
                   itertools.repeat(spreadsheet_mat),
@@ -743,7 +747,7 @@ def find_and_save_nmf_cluster(spreadsheet_mat, run_parameters, sample):
         print('nmf {} of {}'.format(sample + 1, run_parameters["number_of_bootstraps"]))
 
 
-def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process):
+def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process, num_of_boostraps):
     """ central loop: compute components for the consensus matrix by
         non-negative matrix factorization.
 
@@ -752,7 +756,8 @@ def find_and_save_nmf_clusters(spreadsheet_mat, run_parameters, num_of_process):
         run_parameters: dictionay of run-time parameters.
     """
     p = Pool(processes=num_of_process)
-    range_list = range(0, int(run_parameters["number_of_bootstraps"]))
+    #range_list = range(0, int(run_parameters["number_of_bootstraps"]))
+    range_list = range(0, num_of_boostraps)
     p.starmap(find_and_save_nmf_cluster,
           zip(itertools.repeat(spreadsheet_mat),
               itertools.repeat(run_parameters),
