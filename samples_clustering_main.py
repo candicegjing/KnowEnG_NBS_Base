@@ -55,7 +55,7 @@ def main():
     from knpackage.toolbox import get_run_parameters
 
     
-    run_directory, run_file, num_of_process, number_of_bootstraps = get_run_directory_and_file(sys.argv)
+    run_directory, run_file, num_of_process = get_run_directory_and_file(sys.argv)
     run_parameters = get_run_parameters(run_directory, run_file)
     SELECT[run_parameters["method"]](run_parameters, num_of_process)
 
