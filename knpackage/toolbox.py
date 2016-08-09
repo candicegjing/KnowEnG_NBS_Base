@@ -34,8 +34,9 @@ def get_run_directory_and_file(args):
     parser = argparse.ArgumentParser()
     parser.add_argument('-run_directory', type=str)
     parser.add_argument('-run_file', type=str)
-    parser.add_argument('-num_of_process', type=int)
     parser.add_argument('-num_of_boostraps', type=int)
+    parser.add_argument('-num_of_process', type=int)
+
 
 
     args = parser.parse_args()
