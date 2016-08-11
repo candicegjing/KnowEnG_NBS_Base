@@ -1,0 +1,1 @@
+python3 samples_clustering_main.py -run_directory /workspace/jingge_knoweng/KnowEnG_NBS_Base -run_file cc_cluster_nmf_run_file -num_of_process 1 -num_of_boostraps 3 
