@@ -14,7 +14,7 @@ percent_sample	0.8
 number_of_bootstraps	3
 display_clusters	1
 restart_probability	0.7
-verbose	1
+verbose	0
 use_now_name	1
 method1	cluster_nmf
 method2	cc_cluster_nmf

@@ -398,6 +398,8 @@ def perform_DRaWR(network_sparse, spreadsheet_df, len_gene_names, run_parameters
     new_spreadsheet_df = append_baseline_to_spreadsheet(spreadsheet_df, len_gene_names)
 
     final_spreadsheet_matrix, step = smooth_spreadsheet_with_rwr(
+
+
         normalize(new_spreadsheet_df, norm='l1', axis=0), hetero_network, run_parameters)
 
     final_spreadsheet_df = pd.DataFrame(
@@ -637,6 +639,8 @@ def run_net_nmf(run_parameters):
     sample_names = spreadsheet_df.columns
 
     sample_smooth, iterations = smooth_spreadsheet_with_rwr(
+
+
         spreadsheet_mat, network_mat, run_parameters)
     sample_quantile_norm = get_quantile_norm(sample_smooth)
     h_mat = perform_net_nmf(sample_quantile_norm, lap_pos, lap_diag, run_parameters)
@@ -701,6 +705,8 @@ def find_and_save_net_nmf_cluster(network_mat, spreadsheet_mat, lap_dag, lap_val
         spreadsheet_mat, np.float64(run_parameters["percent_sample"]))
     sample_smooth, iterations = \
         smooth_spreadsheet_with_rwr(sample_random, network_mat, run_parameters)
+
+
 
     if int(run_parameters['verbose']) != 0:
         print("{} of {}: iterations = {}".format(
@@ -916,6 +922,8 @@ def pick_a_sample(spreadsheet_mat, percent_sample):
     return sample_random, sample_permutation
 
 def smooth_spreadsheet_with_rwr(restart, network_sparse, run_parameters):
+
+
     """ simulate a random walk with restart. iterate: (R_n+1 = a*N*R_n + (1-a)*R_n).
 
     Args:

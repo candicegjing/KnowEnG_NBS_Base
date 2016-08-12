@@ -6,7 +6,7 @@ Created on Wed Jul 20 14:47:45 2016
 
 """
 
-
+import cProfile
 import time
 
 def nmf(run_parameters):
@@ -34,7 +34,7 @@ def cc_net_nmf(run_parameters, num_of_process, num_of_boostraps):
     '''kmeans consensus clustering of the net-nmf-based clusters'''
     from knpackage.toolbox import run_cc_net_nmf
     start_time = time.time()
-    run_cc_net_nmf(run_parameters, num_of_process, num_of_boostraps)
+    cProfile.run('run_cc_net_nmf(run_parameters, num_of_process, num_of_boostraps)')
     end_time = time.time()
     run_time = end_time - start_time
     output_file = open('time_check.net_nmf', 'a')
