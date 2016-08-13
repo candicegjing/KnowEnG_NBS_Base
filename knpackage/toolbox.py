@@ -684,7 +684,8 @@ def run_cc_net_nmf(run_parameters, num_of_process, num_of_boostraps):
     spreadsheet_mat = spreadsheet_df.as_matrix()
     sample_names = spreadsheet_df.columns
 
-    find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_process, num_of_boostraps)
+    #find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_process, num_of_boostraps)
+    find_and_save_net_nmf_clusters_org(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_boostraps)
 
     linkage_matrix, indicator_matrix = initialization(spreadsheet_mat)
     consensus_matrix = form_consensus_matrix(
@@ -700,13 +701,11 @@ def run_cc_net_nmf(run_parameters, num_of_process, num_of_boostraps):
 
 
 
-def find_and_save_net_nmf_cluster(network_mat, spreadsheet_mat, lap_dag, lap_val, run_parameters, sample):
+def net_nmf_cluster_worker(network_mat, spreadsheet_mat, lap_dag, lap_val, run_parameters, sample):
     sample_random, sample_permutation = pick_a_sample(
         spreadsheet_mat, np.float64(run_parameters["percent_sample"]))
     sample_smooth, iterations = \
         smooth_spreadsheet_with_rwr(sample_random, network_mat, run_parameters)
-
-
 
     if int(run_parameters['verbose']) != 0:
         print("{} of {}: iterations = {}".format(
@@ -718,7 +717,7 @@ def find_and_save_net_nmf_cluster(network_mat, spreadsheet_mat, lap_dag, lap_val
     save_temporary_cluster(h_mat, sample_permutation, run_parameters, sample)
 
 
-def find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_dag, lap_val, run_parameters, num_of_process, num_of_boostraps):
+def find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_dag, lap_val, run_parameters, num_of_process, num_of_boostraps):
     """ central loop: compute components for the consensus matrix from the input
         network and spreadsheet matrices and save them to temp files.
 
@@ -731,7 +730,7 @@ def find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_dag, lap_va
     p = Pool(processes=num_of_process)
     #range_list = range(0, int(run_parameters["number_of_bootstraps"]))
     range_list = range(0, num_of_boostraps)
-    p.starmap(find_and_save_net_nmf_cluster,
+    p.starmap(net_nmf_cluster_worker,
               zip(itertools.repeat(network_mat),
                   itertools.repeat(spreadsheet_mat),
                   itertools.repeat(lap_dag),
@@ -742,6 +741,24 @@ def find_and_save_net_nmf_clusters(network_mat, spreadsheet_mat, lap_dag, lap_va
     p.close()
     p.join()
 
+
+
+def find_and_save_net_nmf_clusters_org(network_mat, spreadsheet_mat, lap_dag, lap_val, run_parameters,num_of_boostraps):
+    range_list = range(0, num_of_boostraps)
+    for sample in range_list:
+        sample_random, sample_permutation = pick_a_sample(
+            spreadsheet_mat, np.float64(run_parameters["percent_sample"]))
+        sample_smooth, iterations = \
+            smooth_spreadsheet_with_rwr(sample_random, network_mat, run_parameters)
+
+        if int(run_parameters['verbose']) != 0:
+            print("{} of {}: iterations = {}".format(
+                sample + 1, run_parameters["number_of_bootstraps"], iterations))
+
+        sample_quantile_norm = get_quantile_norm(sample_smooth)
+        h_mat = perform_net_nmf(sample_quantile_norm, lap_val, lap_dag, run_parameters)
+
+        save_temporary_cluster(h_mat, sample_permutation, run_parameters, sample)
 
 
 def find_and_save_nmf_cluster(spreadsheet_mat, run_parameters, sample):

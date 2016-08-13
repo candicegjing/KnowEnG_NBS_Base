@@ -12,7 +12,7 @@ restart_tolerance	0.0001
 lmbda	1400
 percent_sample	0.8
 number_of_bootstraps	3
-display_clusters	1
+display_clusters	0
 restart_probability	0.7
 verbose	0
 use_now_name	1
