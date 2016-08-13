@@ -1,7 +1,6 @@
 from setuptools import setup
 import vcversioner
 
-
 setup(name='knpackage',
      setup_requires=['vcversioner'],
      vcversioner={
