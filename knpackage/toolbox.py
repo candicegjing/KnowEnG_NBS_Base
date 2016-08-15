@@ -684,8 +684,8 @@ def run_cc_net_nmf(run_parameters, num_of_process, num_of_boostraps):
     spreadsheet_mat = spreadsheet_df.as_matrix()
     sample_names = spreadsheet_df.columns
 
-    #find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_process, num_of_boostraps)
-    find_and_save_net_nmf_clusters_org(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_boostraps)
+    find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_process, num_of_boostraps)
+    #find_and_save_net_nmf_clusters_org(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_boostraps)
 
     linkage_matrix, indicator_matrix = initialization(spreadsheet_mat)
     consensus_matrix = form_consensus_matrix(

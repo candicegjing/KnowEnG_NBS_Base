@@ -1,40 +1,30 @@
-./run.net_nmf 3 3 2>/dev/null 
-./run.net_nmf 3 3 2>/dev/null
-./run.net_nmf 3 3 2>/dev/null
-./run.net_nmf 3 3 2>/dev/null
-./run.net_nmf 3 3 2>/dev/null
-./run.net_nmf 3 10 2>/dev/null
-./run.net_nmf 3 10 2>/dev/null
-./run.net_nmf 3 10 2>/dev/null
-./run.net_nmf 3 10 2>/dev/null
-./run.net_nmf 3 10 2>/dev/null
-./run.net_nmf 8 50 2>/dev/null 
-./run.net_nmf 8 50 2>/dev/null
-./run.net_nmf 8 50 2>/dev/null
-./run.net_nmf 8 50 2>/dev/null
-./run.net_nmf 8 50 2>/dev/null
-./run.net_nmf 5 50 2>/dev/null
-./run.net_nmf 5 50 2>/dev/null
-./run.net_nmf 5 50 2>/dev/null
-./run.net_nmf 5 50 2>/dev/null
-./run.net_nmf 5 50 2>/dev/null
-./run.net_nmf 5 100 2>/dev/null
-./run.net_nmf 5 100 2>/dev/null
-./run.net_nmf 5 100 2>/dev/null
-./run.net_nmf 5 100 2>/dev/null
-./run.net_nmf 5 100 2>/dev/null
-./run.net_nmf 8 100 2>/dev/null
-./run.net_nmf 8 100 2>/dev/null
-./run.net_nmf 8 100 2>/dev/null
-./run.net_nmf 8 100 2>/dev/null
-./run.net_nmf 8 100 2>/dev/null
-./run.net_nmf 5 200 2>/dev/null
-./run.net_nmf 5 200 2>/dev/null
-./run.net_nmf 5 200 2>/dev/null
-./run.net_nmf 5 200 2>/dev/null
-./run.net_nmf 5 200 2>/dev/null
-./run.net_nmf 8 200 2>/dev/null
-./run.net_nmf 8 200 2>/dev/null
-./run.net_nmf 8 200 2>/dev/null
-./run.net_nmf 8 200 2>/dev/null
-./run.net_nmf 8 200 2>/dev/null
+./run.net_nmf 800 50
+./run.net_nmf 800 50
+./run.net_nmf 800 50
+./run.net_nmf 800 50
+./run.net_nmf 800 50
+./run.net_nmf 800 50
+./run.net_nmf 800 50
+./run.net_nmf 800 50
+./run.net_nmf 800 50
+./run.net_nmf 800 50
+./run.net_nmf 800 100
+./run.net_nmf 800 100
+./run.net_nmf 800 100
+./run.net_nmf 800 100
+./run.net_nmf 800 100
+./run.net_nmf 800 100
+./run.net_nmf 800 100
+./run.net_nmf 800 100
+./run.net_nmf 800 100
+./run.net_nmf 800 100
+./run.net_nmf 800 200
+./run.net_nmf 800 200
+./run.net_nmf 800 200
+./run.net_nmf 800 200
+./run.net_nmf 800 200
+./run.net_nmf 800 200
+./run.net_nmf 800 200
+./run.net_nmf 800 200
+./run.net_nmf 800 200
+./run.net_nmf 800 200

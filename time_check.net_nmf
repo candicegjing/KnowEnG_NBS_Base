@@ -97,3 +97,16 @@ Running time on 3 bootstrap, parallelism 1 is 115.69996953010559 seconds
 Running time on 800 bootstrap, parallelism 8 is 2754.8512370586395 seconds
 Running time on 800 bootstrap, parallelism 8 is 1673.30304813385 seconds
 Running time on 800 bootstrap, parallelism 20 is 1706.921804189682 seconds
+Running time on 1 bootstrap, parallelism 1 is 20.206910610198975 seconds
+Running time on 800 bootstrap, parallelism 100 is 17340.91201353073 seconds
+Running time on 800 bootstrap, parallelism 100 is 16573.556888580322 seconds
+Running time on 800 bootstrap, parallelism 100 is 17052.831256628036 seconds
+Running time on 800 bootstrap, parallelism 100 is 16914.59606909752 seconds
+Running time on 800 bootstrap, parallelism 100 is 16684.346207380295 seconds
+Running time on 800 bootstrap, parallelism 100 is 17063.811686992645 seconds
+Running time on 800 bootstrap, parallelism 100 is 16725.809477567673 seconds
+Running time on 800 bootstrap, parallelism 100 is 17210.940945625305 seconds
+Running time on 800 bootstrap, parallelism 100 is 17419.251793384552 seconds
+Running time on 1 bootstrap, parallelism 1 is 75.77102661132812 seconds
+Running time on 1 bootstrap, parallelism 1 is 65.66411066055298 seconds
+Running time on 50 bootstrap, parallelism 10 is 214.0236372947693 seconds

@@ -1,1 +1,1 @@
-python3 samples_clustering_main.py -run_directory /workspace/jingge_knoweng/KnowEnG_NBS_Base -run_file cc_net_cluster_nmf_run_file -num_of_boostraps $1 -num_of_process $2 
+python3 -m cProfile -s tottime samples_clustering_main.py -run_directory /workspace/jingge_knoweng/KnowEnG_NBS_Base -run_file cc_net_cluster_nmf_run_file -num_of_boostraps $1 -num_of_process $2 > ./cprofile/cprofile.stats.$1.$2 
