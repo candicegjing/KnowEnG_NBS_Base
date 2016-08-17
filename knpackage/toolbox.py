@@ -724,6 +724,7 @@ def run_cc_net_nmf(run_parameters, num_of_process, num_of_boostraps):
     if int(run_parameters['display_clusters']) != 0:
         display_clusters(form_consensus_matrix_graphic(consensus_matrix, int(run_parameters['k'])))
 
+    output_file.close()
     return
 
 
@@ -772,21 +773,36 @@ def find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_da
 
 def find_and_save_net_nmf_clusters_org(network_mat, spreadsheet_mat, lap_dag, lap_val, run_parameters,num_of_boostraps):
     range_list = range(0, num_of_boostraps)
+    output_file = open('module_time_check.net_nmf', 'a')
+
     for sample in range_list:
+        start_time = time.time()
         sample_random, sample_permutation = pick_a_sample(
             spreadsheet_mat, np.float64(run_parameters["percent_sample"]))
+        output_file.write("find_and_save_net_nmf_clusters_org: pick_a_sample : {}\n".format(time.time()-start_time))
+
+        start_time = time.time()
         sample_smooth, iterations = \
             smooth_spreadsheet_with_rwr(sample_random, network_mat, run_parameters)
+        output_file.write("find_and_save_net_nmf_clusters_org: smooth_spreadsheet_with_rwr : {}\n".format(time.time()-start_time))
+
 
         if int(run_parameters['verbose']) != 0:
             print("{} of {}: iterations = {}".format(
                 sample + 1, run_parameters["number_of_bootstraps"], iterations))
 
+        start_time = time.time()
         sample_quantile_norm = get_quantile_norm(sample_smooth)
+        output_file.write("find_and_save_net_nmf_clusters_org: get_quantile_norm : {}\n".format(time.time()-start_time))
+
+        start_time = time.time()
         h_mat = perform_net_nmf(sample_quantile_norm, lap_val, lap_dag, run_parameters)
+        output_file.write("find_and_save_net_nmf_clusters_org: perform_net_nmf : {}\n".format(time.time()-start_time))
 
+        start_time = time.time()
         save_temporary_cluster(h_mat, sample_permutation, run_parameters, sample)
-
+        output_file.write("find_and_save_net_nmf_clusters_org: save_temporary_cluster : {}\n".format(time.time()-start_time))
+    output_file.close()
 
 def find_and_save_nmf_cluster(spreadsheet_mat, run_parameters, sample):
     sample_random, sample_permutation = pick_a_sample(spreadsheet_mat, np.float64(run_parameters["percent_sample"]))
@@ -890,9 +906,19 @@ def form_consensus_matrix(run_parameters, linkage_matrix, indicator_matrix):
     Returns:
         consensus_matrix: (sum of linkage matrices) / (sum of indicator matrices).
     """
+    output_file = open('module_time_check.net_nmf', 'a')
+    start_time = time.time()
     indicator_matrix = form_indicator_matrix(run_parameters, indicator_matrix)
+    output_file.write("form_indicator_matrix : {} \n".format(time.time()-start_time))
+
+    start_time = time.time()
     linkage_matrix = form_linkage_matrix(run_parameters, linkage_matrix)
+    output_file.write("form_linkage_matrix : {} \n".format(time.time()-start_time))
+
+    start_time = time.time()
     consensus_matrix = linkage_matrix / np.maximum(indicator_matrix, 1)
+    output_file.write("consensus_matrix : {} \n".format(time.time()-start_time))
+    output_file.close()
 
     return consensus_matrix
 
