@@ -674,50 +674,50 @@ def run_cc_net_nmf(run_parameters, num_of_process, num_of_boostraps):
     network_df = map_node_names_to_index(network_df, genes_lookup_table, 'node_1')
     network_df = map_node_names_to_index(network_df, genes_lookup_table, 'node_2')
 
-    start_time = time()
+    start_time = time.time()
     network_df = symmetrize_df(network_df)
-    print("symmetrize_df : {} ".format(time() - start_time))
+    print("symmetrize_df : {} ".format(time.time() - start_time))
 
-    start_time = time()
+    start_time = time.time()
     network_mat = convert_df_to_sparse(network_df, len(unique_gene_names))
-    print("convert_df_to_sparse : {} ".format(time() - start_time))
+    print("convert_df_to_sparse : {} ".format(time.time() - start_time))
 
-    start_time = time()
+    start_time = time.time()
     network_mat = normalized_matrix(network_mat)
-    print("normalized_matrix : {} ".format(time() - start_time))
+    print("normalized_matrix : {} ".format(time.time() - start_time))
 
-    start_time = time()
+    start_time = time.time()
     lap_diag, lap_pos = form_network_laplacian(network_mat)
-    print("form_network_laplacian : {} ".format(time() - start_time))
+    print("form_network_laplacian : {} ".format(time.time() - start_time))
 
-    start_time = time()
+    start_time = time.time()
     spreadsheet_df = update_spreadsheet(spreadsheet_df, unique_gene_names)
     spreadsheet_mat = spreadsheet_df.as_matrix()
     sample_names = spreadsheet_df.columns
-    print("update_spreadsheet, as_matrix, columns : {} ".format(time() - start_time))
+    print("update_spreadsheet, as_matrix, columns : {} ".format(time.time() - start_time))
 
 
-    start_time = time()
+    start_time = time.time()
     #find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_process, num_of_boostraps)
     find_and_save_net_nmf_clusters_org(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_boostraps)
-    print("find_and_save_net_nmf_clusters_org : {} ".format(time()-start_time))
+    print("find_and_save_net_nmf_clusters_org : {} ".format(time.time()-start_time))
 
-    start_time = time()
+    start_time = time.time()
     linkage_matrix, indicator_matrix = initialization(spreadsheet_mat)
-    print("initialization : {}".format(time()-start_time))
+    print("initialization : {}".format(time.time()-start_time))
 
-    start_time = time()
+    start_time = time.time()
     consensus_matrix = form_consensus_matrix(run_parameters, linkage_matrix, indicator_matrix)
-    print("form_consensus_matrix : {} ".format(time()-start_time))
+    print("form_consensus_matrix : {} ".format(time.time()-start_time))
 
-    start_time = time()
+    start_time = time.time()
     labels = kmeans_cluster_consensus_matrix(consensus_matrix, int(run_parameters['k']))
-    print("kmeans_cluster_consensus_matrix : {} ".format(time()- start_time))
+    print("kmeans_cluster_consensus_matrix : {} ".format(time.time()- start_time))
 
 
-    start_time = time()
+    start_time = time.time()
     save_consensus_cluster_result(consensus_matrix, sample_names, labels, run_parameters)
-    print("save_consensus_cluster_result : {} ".format(time()-start_time))
+    print("save_consensus_cluster_result : {} ".format(time.time()-start_time))
 
 
     if int(run_parameters['display_clusters']) != 0:
@@ -1235,7 +1235,7 @@ def echo_input(network_mat, spreadsheet_mat, run_parameters):
     usr_cols = spreadsheet_mat.shape[1]
     print('\nMethod: {}'.format(run_parameters['method']))
     date_frm = "Local: %a, %d %b %Y %H:%M:%S"
-    print('Data Loaded:\t{}'.format(time.strftime(date_frm, time.localtime())))
+    print('Data Loaded:\t{}'.format(time.strftime(date_frm, time.localtime.time())))
     print('\nnetwork_file_name: {}'.format(run_parameters['network_file_name']))
     print('network    matrix {} x {}'.format(net_rows, net_cols))
     print('\nsamples_file_name: {}'.format(run_parameters['samples_file_name']))
@@ -1344,10 +1344,10 @@ def now_name(name_base, name_extension, run_parameters=None):
     dt_max = 1e6
     dt_min = 1
     if run_parameters is None:
-        nstr = time.strftime("%a_%d_%b_%Y_%H_%M_%S", time.localtime())
+        nstr = time.strftime("%a_%d_%b_%Y_%H_%M_%S", time.localtime.time())
     else:
         time_step = min(max(int(run_parameters['use_now_name']), dt_min), dt_max)
-        nstr = np.str_(int(time.time() * time_step))
+        nstr = np.str_(int(time.time.time() * time_step))
 
     time_stamped_file_name = name_base + '_' + nstr + '.' + name_extension
 
