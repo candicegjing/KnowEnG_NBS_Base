@@ -677,48 +677,47 @@ def run_cc_net_nmf(run_parameters, num_of_process, num_of_boostraps):
     output_file = open('module_time_check.net_nmf', 'a')
     start_time = time.time()
     network_df = symmetrize_df(network_df)
-    output_file.write("symmetrize_df : {} ".format(time.time() - start_time))
+    output_file.write("run_cc_net_nmf: symmetrize_df : {} \n".format(time.time() - start_time))
 
     start_time = time.time()
     network_mat = convert_df_to_sparse(network_df, len(unique_gene_names))
-    output_file.write("convert_df_to_sparse : {} ".format(time.time() - start_time))
+    output_file.write("run_cc_net_nmf: convert_df_to_sparse : {} \n".format(time.time() - start_time))
 
     start_time = time.time()
     network_mat = normalized_matrix(network_mat)
-    output_file.write("normalized_matrix : {} ".format(time.time() - start_time))
+    output_file.write("run_cc_net_nmf: normalized_matrix : {} \n".format(time.time() - start_time))
 
     start_time = time.time()
     lap_diag, lap_pos = form_network_laplacian(network_mat)
-    output_file.write("form_network_laplacian : {} ".format(time.time() - start_time))
+    output_file.write("run_cc_net_nmf: form_network_laplacian : {} \n".format(time.time() - start_time))
 
     start_time = time.time()
     spreadsheet_df = update_spreadsheet(spreadsheet_df, unique_gene_names)
     spreadsheet_mat = spreadsheet_df.as_matrix()
     sample_names = spreadsheet_df.columns
-    output_file.write("update_spreadsheet, as_matrix, columns : {} ".format(time.time() - start_time))
+    output_file.write("run_cc_net_nmf: update_spreadsheet, as_matrix, columns : {} \n".format(time.time() - start_time))
 
 
     start_time = time.time()
     #find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_process, num_of_boostraps)
     find_and_save_net_nmf_clusters_org(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_boostraps)
-    output_file.write("find_and_save_net_nmf_clusters_org : {} ".format(time.time()-start_time))
+    output_file.write("run_cc_net_nmf: find_and_save_net_nmf_clusters_org : {} \n".format(time.time()-start_time))
 
     start_time = time.time()
     linkage_matrix, indicator_matrix = initialization(spreadsheet_mat)
-    output_file.write("initialization : {}".format(time.time()-start_time))
+    output_file.write("run_cc_net_nmf: initialization : {} \n".format(time.time()-start_time))
 
     start_time = time.time()
     consensus_matrix = form_consensus_matrix(run_parameters, linkage_matrix, indicator_matrix)
-    output_file.write("form_consensus_matrix : {} ".format(time.time()-start_time))
+    output_file.write("run_cc_net_nmf: form_consensus_matrix : {} \n".format(time.time()-start_time))
 
     start_time = time.time()
     labels = kmeans_cluster_consensus_matrix(consensus_matrix, int(run_parameters['k']))
-    output_file.write("kmeans_cluster_consensus_matrix : {} ".format(time.time()- start_time))
-
+    output_file.write("run_cc_net_nmf: kmeans_cluster_consensus_matrix : {} \n".format(time.time()- start_time))
 
     start_time = time.time()
     save_consensus_cluster_result(consensus_matrix, sample_names, labels, run_parameters)
-    output_file.write("save_consensus_cluster_result : {} ".format(time.time()-start_time))
+    output_file.write("run_cc_net_nmf: save_consensus_cluster_result : {} \n".format(time.time()-start_time))
 
 
     if int(run_parameters['display_clusters']) != 0:
@@ -1102,6 +1101,7 @@ def perform_net_nmf(x_matrix, lap_val, lap_dag, run_parameters):
     Returns:
         h_matrix: nonnegative right factor (H) matrix.
     """
+    output_file = open('module_time_check.net_nmf', 'a')
     k = float(run_parameters["k"])
     lmbda = float(run_parameters["lmbda"])
     epsilon = 1e-15
@@ -1120,9 +1120,14 @@ def perform_net_nmf(x_matrix, lap_val, lap_dag, run_parameters):
             h_clust_eq = h_clusters
             if h_eq_count >= float(run_parameters["h_clust_eq_limit"]):
                 break
+        start_time = time.time()
         numerator = maximum(np.dot(x_matrix, h_matrix.T) + lmbda * lap_val.dot(w_matrix), epsilon)
+        output_file.write("perform_net_nmf : numerator : {} \n".format(time.time()-start_time))
+
+        start_time = time.time()
         denomerator = maximum(np.dot(w_matrix, np.dot(h_matrix, h_matrix.T))
                               + lmbda * lap_dag.dot(w_matrix), epsilon)
+        output_file.write("perform_net_nmf : denomerator : {} \n".format(time.time()-start_time))
         w_matrix = w_matrix * (numerator / denomerator)
         w_matrix = maximum(w_matrix / maximum(sum(w_matrix), epsilon), epsilon)
         h_matrix = get_h(w_matrix, x_matrix)
