@@ -1347,7 +1347,7 @@ def now_name(name_base, name_extension, run_parameters=None):
         nstr = time.strftime("%a_%d_%b_%Y_%H_%M_%S", time.localtime.time())
     else:
         time_step = min(max(int(run_parameters['use_now_name']), dt_min), dt_max)
-        nstr = np.str_(int(time.time()() * time_step))
+        nstr = np.str_(int(time.time() * time_step))
 
     time_stamped_file_name = name_base + '_' + nstr + '.' + name_extension
 
