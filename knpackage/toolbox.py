@@ -674,25 +674,51 @@ def run_cc_net_nmf(run_parameters, num_of_process, num_of_boostraps):
     network_df = map_node_names_to_index(network_df, genes_lookup_table, 'node_1')
     network_df = map_node_names_to_index(network_df, genes_lookup_table, 'node_2')
 
+    start_time = time()
     network_df = symmetrize_df(network_df)
+    print("symmetrize_df : {} ".format(time() - start_time))
+
+    start_time = time()
     network_mat = convert_df_to_sparse(network_df, len(unique_gene_names))
+    print("convert_df_to_sparse : {} ".format(time() - start_time))
 
+    start_time = time()
     network_mat = normalized_matrix(network_mat)
-    lap_diag, lap_pos = form_network_laplacian(network_mat)
+    print("normalized_matrix : {} ".format(time() - start_time))
 
+    start_time = time()
+    lap_diag, lap_pos = form_network_laplacian(network_mat)
+    print("form_network_laplacian : {} ".format(time() - start_time))
+
+    start_time = time()
     spreadsheet_df = update_spreadsheet(spreadsheet_df, unique_gene_names)
     spreadsheet_mat = spreadsheet_df.as_matrix()
     sample_names = spreadsheet_df.columns
+    print("update_spreadsheet, as_matrix, columns : {} ".format(time() - start_time))
 
-    find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_process, num_of_boostraps)
-    #find_and_save_net_nmf_clusters_org(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_boostraps)
 
+    start_time = time()
+    #find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_process, num_of_boostraps)
+    find_and_save_net_nmf_clusters_org(network_mat, spreadsheet_mat, lap_diag, lap_pos, run_parameters, num_of_boostraps)
+    print("find_and_save_net_nmf_clusters_org : {} ".format(time()-start_time))
+
+    start_time = time()
     linkage_matrix, indicator_matrix = initialization(spreadsheet_mat)
-    consensus_matrix = form_consensus_matrix(
-        run_parameters, linkage_matrix, indicator_matrix)
-    labels = kmeans_cluster_consensus_matrix(consensus_matrix, int(run_parameters['k']))
+    print("initialization : {}".format(time()-start_time))
 
+    start_time = time()
+    consensus_matrix = form_consensus_matrix(run_parameters, linkage_matrix, indicator_matrix)
+    print("form_consensus_matrix : {} ".format(time()-start_time))
+
+    start_time = time()
+    labels = kmeans_cluster_consensus_matrix(consensus_matrix, int(run_parameters['k']))
+    print("kmeans_cluster_consensus_matrix : {} ".format(time()- start_time))
+
+
+    start_time = time()
     save_consensus_cluster_result(consensus_matrix, sample_names, labels, run_parameters)
+    print("save_consensus_cluster_result : {} ".format(time()-start_time))
+
 
     if int(run_parameters['display_clusters']) != 0:
         display_clusters(form_consensus_matrix_graphic(consensus_matrix, int(run_parameters['k'])))
@@ -727,7 +753,7 @@ def find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_da
         lap_dag, lap_val: laplacian matrix components; L = lap_dag - lap_val.
         run_parameters: dictionay of run-time parameters.
     """
-    p = Pool(processes=num_of_process)
+    p = Pool(threads=num_of_process)
     #range_list = range(0, int(run_parameters["number_of_bootstraps"]))
     range_list = range(0, num_of_boostraps)
     p.starmap(net_nmf_cluster_worker,
