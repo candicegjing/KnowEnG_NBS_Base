@@ -754,7 +754,7 @@ def find_and_save_net_nmf_clusters_parallel(network_mat, spreadsheet_mat, lap_da
         lap_dag, lap_val: laplacian matrix components; L = lap_dag - lap_val.
         run_parameters: dictionay of run-time parameters.
     """
-    p = Pool(threads=num_of_process)
+    p = Pool(processes=num_of_process)
     #range_list = range(0, int(run_parameters["number_of_bootstraps"]))
     range_list = range(0, num_of_boostraps)
     p.starmap(net_nmf_cluster_worker,
