@@ -1,0 +1,2 @@
+Launch a chronos job:
+curl -L -H 'Content-Type: application/json' -X POST -d '{"async": true,"command": "python3 /storage-pool/jingge/shared/jingge/distributed_computing/simplified.py","epsilon": "PT30M","errorCount": 0,"lastError": "","schedule": "R/2016-09-12T21:05:00.000Z/PT24H","name": "jingge_testing","owner": "jingge2@illinois.edu","retries": 2,"successCount": 10}' knowcluster01.dyndns.org:4400/scheduler/iso8601
