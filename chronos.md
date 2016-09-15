@@ -1,8 +1,10 @@
-Launch a chronos job:
+** Launch a chronos job:
+```
 curl -L -H 'Content-Type: application/json' -X POST -d '{"async": true,"command": "python3 /mnt/knowstorage/jingge/distributed_computing/simplified.py","epsilon": "PT30M","errorCount": 0,"lastError": "","schedule": "R/2016-09-12T21:05:00.000Z/PT24H","name": "jingge_testing","owner": "jingge2@illinois.edu","retries": 2,"successCount": 10}' knowcluster01.dyndns.org:4400/scheduler/iso8601
+```
 
-
-example result:
+** Example result:
+```
 Received SUBSCRIBED event
 Subscribed executor on knowcluster06.dyndns.org
 Received LAUNCH event
@@ -22,3 +24,4 @@ knowcluster04.dyndns.org executed job 2 at 1473868442.144034 with 13
 Total job time: 0.013 sec, wall time: 0.040 sec, speedup: 0.328
 
 Command exited with status 0 (pid: 28163)
+```
