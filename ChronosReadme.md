@@ -37,12 +37,16 @@ curl -L -X DELETE knowcluster01.dyndns.org:4400/scheduler/job/jingge_testing
 
 ## Knowcluster information
  * Mapping 
+ 
 | Cluster localhost | Container env |
 | ------------- | ------------- |
 | /mnt/backup/users/jingge | /workspace/backup |
 | /mnt/knowstorage/jingge/ | Doesn't apply |
-  
+ 
+ 
+
  * Cluster IP address
+ 
 |  Cluster Name | Cluster IP    |
 | ------------- | ------------- |
 | knowcluster01 |192.17.176.157 |
