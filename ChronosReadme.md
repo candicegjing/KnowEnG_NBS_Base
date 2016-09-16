@@ -7,7 +7,7 @@ curl -L -H 'Content-Type: application/json' -X POST -d '{"async": true,"command"
 ```
 
 ## Example result:
- * Only have one node 
+ * Run on Cloud9
 ```
 Received SUBSCRIBED event
 Subscribed executor on knowcluster03.dyndns.org
@@ -85,16 +85,53 @@ Total job time: 0.032 sec, wall time: 0.217 sec, speedup: 0.148
 Command exited with status 0 (pid: 6585)
 ```
  
- * Error
+ * Run on localhost
  ```
- I0915 20:12:49.813545 15825 exec.cpp:161] Version: 1.0.1
-I0915 20:12:49.815750 15833 exec.cpp:236] Executor registered on agent 3c3ae31b-2ddd-40b4-a611-d9c83dfac6b0-S257
-Traceback (most recent call last):
-  File "/mnt/backup/users/jingge/distributed_computing/simplified.py", line 1, in <module>
-    import dispy, random
-ImportError: No module named 'dispy'
-```
+ 
 
+Received SUBSCRIBED event
+Subscribed executor on knowcluster07.dyndns.org
+Received LAUNCH event
+Starting task ct:1474041420000:0:jingge_localhost:
+/usr/libexec/mesos/mesos-containerizer launch --command="{"environment":{"variables":[{"name":"mesos_task_id","value":"ct:1474041420000:0:jingge_localhost:"},{"name":"CHRONOS_JOB_OWNER","value":"jingge2@illinois.edu"},{"name":"CHRONOS_JOB_NAME","value":"jingge_localhost"},{"name":"HOST","value":"knowcluster07.dyndns.org"},{"name":"CHRONOS_RESOURCE_MEM","value":"128.0"},{"name":"CHRONOS_RESOURCE_CPU","value":"0.1"},{"name":"CHRONOS_RESOURCE_DISK","value":"256.0"}]},"shell":true,"user":"root","value":"python3 \/mnt\/backup\/users\/jingge\/distributed_computing\/simplified.py"}" --help="false" --unshare_namespace_mnt="false"
+Forked command at 14154
+2016-09-16 15:56:48 asyncoro - version 4.2.2 with epoll I/O notifier
+2016-09-16 15:56:48 dispy - Storing fault recovery information in "_dispy_20160916155648"
+knowcluster05.dyndns.org executed job 0 at 1474041415.1529186 with 11
+In compute function with number = 11, on host knowcluster05.dyndns.org
+
+  None 192.17.176.161 1474041415.1529186 1474041415.1575608
+knowcluster02.dyndns.org executed job 1 at 1474041429.986635 with 16
+In compute function with number = 16, on host knowcluster02.dyndns.org
+
+  None 192.17.176.151 1474041429.986635 1474041429.991863
+knowcluster01.dyndns.org executed job 2 at 1474041427.0966625 with 6
+In compute function with number = 6, on host knowcluster01.dyndns.org
+
+  None 192.17.176.156 1474041427.0966625 1474041427.1016147
+knowcluster05.dyndns.org executed job 3 at 1474041415.1547046 with 13
+In compute function with number = 13, on host knowcluster05.dyndns.org
+
+  None 192.17.176.161 1474041415.1547046 1474041415.1597545
+knowcluster02.dyndns.org executed job 4 at 1474041429.9865818 with 5
+In compute function with number = 5, on host knowcluster02.dyndns.org
+
+  None 192.17.176.151 1474041429.9865818 1474041429.9909887
+
+                           Node |  CPUs |    Jobs |    Sec/Job | Node Time Sec
+------------------------------------------------------------------------------
+ 192.17.176.158 (knowcluster03. |    16 |       0 |      0.000 |         0.000
+ 192.17.176.152 (knowcluster06. |    24 |       0 |      0.000 |         0.000
+ 192.17.176.161 (knowcluster05. |    16 |       2 |      0.005 |         0.010
+ 192.17.176.151 (knowcluster02. |    16 |       2 |      0.005 |         0.010
+ 192.17.176.156 (knowcluster01. |    16 |       1 |      0.005 |         0.005
+
+Total job time: 0.024 sec, wall time: 0.209 sec, speedup: 0.116
+
+Command exited with status 0 (pid: 14154)
+
+
+ ```
  
 ## Kill a job
 ```
